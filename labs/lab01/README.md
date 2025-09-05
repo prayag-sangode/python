@@ -1,5 +1,8 @@
 # Create project directory
 ## Clone exsiting repo
+```bash
+https://github.com/prayag-sangode/python
+```
 
 or
 
@@ -21,16 +24,18 @@ EOF
 ```
 
 # Run in venv
+```bash
 python3 -m venv myenv
 source myenv/bin/activate
+```
 
 # Run the Python script
-bash ```
+```bash
 python hello.py
 ```
 
 **Expected Output:**
 
-```
+```bash
 Hello World
 ```
