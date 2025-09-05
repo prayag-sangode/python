@@ -1,0 +1,34 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+myenv/
+venv/
+.env
+
+# Python package distribution
+*.egg
+*.egg-info/
+dist/
+build/
+*.wheel
+
+# Logs and database files
+*.log
+*.sqlite3
+
+# IDE/project files
+.vscode/
+.idea/
+*.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
