@@ -74,7 +74,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 ## Step 5: Test Endpoints
 
-### 1️⃣ Path Parameter
+### Path Parameter
 
 ```bash
 curl http://127.0.0.1:8000/items/5
@@ -86,7 +86,7 @@ curl http://127.0.0.1:8000/items/5
 {"item_id":5,"message":"Item ID is 5"}
 ```
 
-### 2️⃣ Query Parameter
+### Query Parameter
 
 ```bash
 curl "http://127.0.0.1:8000/search/?q=fastapi&limit=3"
@@ -110,7 +110,7 @@ curl "http://127.0.0.1:8000/search/"
 
 ---
 
-### ✅ Key Learning Points
+### Key Learning Points
 
 * Use **path parameters** for dynamic URLs (`/items/{item_id}`)
 * Use **query parameters** for optional filters (`?q=fastapi&limit=3`)
