@@ -1,12 +1,12 @@
-# Lab 22: FastAPI Hello World
+# Lab 23: FastAPI Path & Query Parameters
 
 ---
 
 ## Step 1: Create Project Directory
 
 ```bash
-mkdir -p ~/python/labs/lab22
-cd ~/python/labs/lab22
+mkdir -p ~/python/labs/lab23
+cd ~/python/labs/lab23
 ```
 
 ---
@@ -40,12 +40,19 @@ pip install -r requirements.txt
 ```bash
 cat >> main.py << EOF
 from fastapi import FastAPI
+from typing import Optional
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello, FastAPI World!"}
+# --- Path Parameter ---
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    return {"item_id": item_id, "message": f"Item ID is {item_id}"}
+
+# --- Query Parameter ---
+@app.get("/search/")
+def search_item(q: Optional[str] = None, limit: int = 10):
+    return {"query": q, "limit": limit, "message": f"Searching for '{q}' with limit {limit}"}
 EOF
 ```
 
@@ -58,30 +65,55 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 * Server runs at **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
-* FastAPI **interactive docs** are available at:
+* Interactive docs:
 
   * Swagger UI: `http://127.0.0.1:8000/docs`
   * Redoc: `http://127.0.0.1:8000/redoc`
 
 ---
 
-## Step 5: Test the GET Endpoint
+## Step 5: Test Endpoints
+
+### Path Parameter
 
 ```bash
-curl http://127.0.0.1:8000/
+curl http://127.0.0.1:8000/items/5
 ```
 
-**Expected Output:**
+**Output:**
 
 ```json
-{"message":"Hello, FastAPI World!"}
+{"item_id":5,"message":"Item ID is 5"}
+```
+
+### Query Parameter
+
+```bash
+curl "http://127.0.0.1:8000/search/?q=fastapi&limit=3"
+```
+
+**Output:**
+
+```json
+{"query":"fastapi","limit":3,"message":"Searching for 'fastapi' with limit 3"}
+```
+
+* Default values also work:
+
+```bash
+curl "http://127.0.0.1:8000/search/"
+```
+
+```json
+{"query":null,"limit":10,"message":"Searching for 'None' with limit 10"}
 ```
 
 ---
 
 ### Key Learning Points
 
-* **FastAPI app** initialization
-* Define a **GET endpoint** with a function
-* Return **JSON response** automatically
-* FastAPI provides **interactive API docs** out-of-the-box
+* Use **path parameters** for dynamic URLs (`/items/{item_id}`)
+* Use **query parameters** for optional filters (`?q=fastapi&limit=3`)
+* FastAPI automatically **validates types** (`int`, `str`, etc.)
+* Optional parameters can have **default values** using `Optional[...]`
+
