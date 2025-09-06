@@ -1,9 +1,3 @@
-Perfect 👌 — MongoDB **8.0** now has **official support for Ubuntu 24.04 (Noble)** 🎉 so let’s update your lab with this installation flow + Python CRUD code.
-
-Here’s the **updated `README.md` for MongoDB CRUD (Lab 15)**:
-
----
-
 # Lab 15: MongoDB CRUD with Python
 
 In this lab, you will:
@@ -143,7 +137,7 @@ python mongodb_crud.py
 
 ---
 
-### ✅ Expected Output
+### Expected Output
 
 ```
 Inserted employees
@@ -155,7 +149,3 @@ Deleted Bob
 Final Employees:
 {'_id': ObjectId('...'), 'name': 'Alice', 'age': 31, 'dept': 'HR'}
 ```
-
----
-
-Would you like me to also add a **cleanup section** (dropping the `company` DB at the end) so that you can re-run this lab multiple times without manually deleting docs?
