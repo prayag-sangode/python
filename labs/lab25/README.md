@@ -117,7 +117,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 ## Step 5: Test Endpoints
 
-### 1️⃣ Create a Note
+### Create a Note
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/notes/" \
@@ -137,7 +137,7 @@ curl -X POST "http://127.0.0.1:8000/notes/" \
 
 ---
 
-### 2️⃣ Read All Notes
+### Read All Notes
 
 ```bash
 curl -X GET "http://127.0.0.1:8000/notes/"
@@ -157,7 +157,7 @@ curl -X GET "http://127.0.0.1:8000/notes/"
 
 ---
 
-### 3️⃣ Read Single Note by ID
+### Read Single Note by ID
 
 ```bash
 curl -X GET "http://127.0.0.1:8000/notes/1"
@@ -175,7 +175,7 @@ curl -X GET "http://127.0.0.1:8000/notes/1"
 
 ---
 
-### 4️⃣ Update a Note
+### Update a Note
 
 ```bash
 curl -X PUT "http://127.0.0.1:8000/notes/1" \
@@ -195,7 +195,7 @@ curl -X PUT "http://127.0.0.1:8000/notes/1" \
 
 ---
 
-### 5️⃣ Delete a Note
+### Delete a Note
 
 ```bash
 curl -X DELETE "http://127.0.0.1:8000/notes/1"
@@ -209,7 +209,7 @@ curl -X DELETE "http://127.0.0.1:8000/notes/1"
 
 ---
 
-### ✅ Key Learning Points
+### Key Learning Points
 
 * Implement full **CRUD operations** with FastAPI
 * Use **Pydantic models** for input/output validation
