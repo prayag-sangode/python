@@ -74,30 +74,38 @@ sudo apt install -y nginx
 ## Step 5: Configure Nginx as Reverse Proxy
 
 ```bash
-sudo tee /etc/nginx/sites-available/fastapi_gateway << EOF
-upstream fastapi_app {
-    server 127.0.0.1:8001;
-    server 127.0.0.1:8002;
-}
-
+sudo tee /etc/nginx/sites-available/service << EOF
 server {
     listen 80;
 
-    location / {
-        proxy_pass http://fastapi_app;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
+    server_name localhost;
+
+    # Default root (optional, for static files if needed)
+    root /var/www/html;
+    index index.html;
+
+    # Proxy requests to /service → Flask app on port 5000
+    location /service {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Optional: static files if your app serves any
+    location /static {
+        alias /var/www/html/static;
     }
 }
+
 EOF
 ```
 
 Enable the config:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/fastapi_gateway /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/service /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```
