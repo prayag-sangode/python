@@ -85,17 +85,8 @@ server {
 
     server_name localhost;
 
-    # Proxy root endpoint to FastAPI
+    # Proxy all requests to FastAPI backend
     location / {
-        proxy_pass http://fastapi_backend;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-    }
-
-    # Proxy /service endpoint to FastAPI
-    location /service {
         proxy_pass http://fastapi_backend;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
@@ -158,7 +149,7 @@ Responses will be served alternately by the **two FastAPI instances** (round-rob
 ## Step 7: Key Learning Points
 
 * **Nginx upstream block** = backend pool for load balancing.
-* Both `/` and `/service` are now served by FastAPI (no more default Nginx welcome page).
+* Only one `location /` block is enough to route both `/` and `/service`.
 * Requests are **proxied and load balanced** across FastAPI instances.
 * You can extend with **SSL, rate limiting, caching, authentication**.
 * This setup mimics a **basic API Gateway** architecture.
