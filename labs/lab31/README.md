@@ -71,11 +71,11 @@ sudo apt install -y nginx
 
 ---
 
-## Step 5: Configure Nginx as Reverse Proxy
+## Step 5: Configure Nginx as Reverse Proxy + Load Balancer
 
 ```bash
-sudo tee /etc/nginx/sites-available/fastapi_gateway << EOF
-upstream fastapi_app {
+sudo tee /etc/nginx/sites-available/service << EOF
+upstream fastapi_backend {
     server 127.0.0.1:8001;
     server 127.0.0.1:8002;
 }
@@ -83,8 +83,20 @@ upstream fastapi_app {
 server {
     listen 80;
 
+    server_name localhost;
+
+    # Proxy root endpoint to FastAPI
     location / {
-        proxy_pass http://fastapi_app;
+        proxy_pass http://fastapi_backend;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+
+    # Proxy /service endpoint to FastAPI
+    location /service {
+        proxy_pass http://fastapi_backend;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
@@ -97,7 +109,8 @@ EOF
 Enable the config:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/fastapi_gateway /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/sites-available/service /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```
@@ -106,7 +119,7 @@ sudo systemctl restart nginx
 
 ## Step 6: Test API Gateway
 
-### Send request via Nginx (port 80):
+### Test root endpoint
 
 ```bash
 curl http://127.0.0.1/
@@ -116,6 +129,18 @@ curl http://127.0.0.1/
 
 ```json
 {"message":"Hello from FastAPI"}
+```
+
+### Test service endpoint
+
+```bash
+curl http://127.0.0.1/service
+```
+
+**Expected Response:**
+
+```json
+{"message":"This is the service endpoint"}
 ```
 
 ### Test load balancing
@@ -133,6 +158,7 @@ Responses will be served alternately by the **two FastAPI instances** (round-rob
 ## Step 7: Key Learning Points
 
 * **Nginx upstream block** = backend pool for load balancing.
-* Requests are **proxied to FastAPI** via `proxy_pass`.
-* Can add **SSL, caching, rate limiting, authentication** in Nginx.
+* Both `/` and `/service` are now served by FastAPI (no more default Nginx welcome page).
+* Requests are **proxied and load balanced** across FastAPI instances.
+* You can extend with **SSL, rate limiting, caching, authentication**.
 * This setup mimics a **basic API Gateway** architecture.
