@@ -66,7 +66,7 @@ async def log_requests(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
-    print(f"➡️ {request.method} {request.url} - Completed in {process_time:.4f}s")
+    print(f" {request.method} {request.url} - Completed in {process_time:.4f}s")
     response.headers["X-Process-Time"] = str(process_time)
     return response
 
@@ -95,7 +95,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 ## Step 5: Test Endpoints
 
-✅ **Success case**
+ **Success case**
 
 ```bash
 curl "http://127.0.0.1:8000/divide?a=10&b=2"
@@ -107,7 +107,7 @@ Response:
 {"result": 5.0}
 ```
 
-❌ **Handled ValueError**
+ **Handled ValueError**
 
 ```bash
 curl "http://127.0.0.1:8000/divide?a=10&b=0"
@@ -119,7 +119,7 @@ Response:
 {"error":"Invalid value provided","details":"Division by zero is not allowed"}
 ```
 
-❌ **Global Exception**
+ **Global Exception**
 
 ```bash
 curl "http://127.0.0.1:8000/error"
@@ -138,7 +138,7 @@ Response:
 Check terminal logs:
 
 ```
-➡️ GET http://127.0.0.1:8000/divide?a=10&b=2 - Completed in 0.0012s
+ GET http://127.0.0.1:8000/divide?a=10&b=2 - Completed in 0.0012s
 ```
 
 Response headers include:
@@ -147,7 +147,7 @@ Response headers include:
 X-Process-Time: 0.0012
 ```
 
----
+
 
 ## Key Learning Points
 
